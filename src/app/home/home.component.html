@@ -1,0 +1,353 @@
+<div
+  class="h-screen w-screen bg-custom-primary overflow-y-auto overflow-x-hidden relative"
+>
+  <div class="fondoFigura absolute inset-0 z-0"></div>
+  <!-- READ : PRIMER PARTE -->
+  <div class="h-[100%] w-full bg-transparent relative z-10">
+    <!-- APP BAR -->
+    <div class="w-full h-[14%] px-[5%] flex flex-row">
+      <section class="flex flex-row items-center h-full w-[60%] gap-[4%]">
+        <p
+          class="text-custom-secondary font-bold font-maven-pro text-3xl"
+          style="text-shadow: 2px 2px 4px #7b7e80"
+        >
+          EasyPark
+        </p>
+        <div class="w-[7%] h-[1%]"></div>
+        <p
+          class="text-custom-secondary font-maven-pro text-xl hover:text-custom-quaternary hover:font-bold"
+        >
+          Servicios
+        </p>
+        <p
+          class="text-custom-secondary font-maven-pro text-xl hover:text-custom-quaternary hover:font-bold"
+        >
+          Ver la aplicacion
+        </p>
+        <p
+          class="text-custom-secondary font-maven-pro text-xl hover:text-custom-quaternary hover:font-bold"
+        >
+          Testimonios
+        </p>
+      </section>
+      <section class="flex flex-row justify-end items-center h-full w-[50%]">
+        <button
+          (click)="iniciarParking()"
+          class="font-bold text-custom-primary text-xl border border-custom-primary rounded-md p-2 hover:bg-custom-quinary hover:text-custom-secondary transition duration-300 ease-in-out"
+        >
+          Iniciar sesión
+        </button>
+      </section>
+    </div>
+    <!-- BODY -->
+    <div class="flex flex-row w-full h-[86%]">
+      <div class="w-[50%] h-full items-center justify-center flex">
+        <img
+          src="https://livedemo00.template-help.com/wt_prod-22320/images/index-1-700x587.png"
+          alt=""
+          class="object-contain h-[90%] w-[75%]"
+        />
+      </div>
+      <div class="w-[50%] h-full items-center justify-center flex pl-[7%]">
+        <!-- LOGIC : FORMULARIO REGISTRO -->
+        <form class="h-[95%] w-[80%] flex flex-col gap-[2.5%]">
+          <div class="gap-3 flex flex-col">
+            <p class="text-4xl font-bold font-maven-pro text-custom-primary">
+              REGISTRAR TU PARKING
+            </p>
+            <div class="flex flex-row items-center gap-2">
+              <img
+                src="assets/home-telefono.svg"
+                alt=""
+                class="h-8 w-8 object-contain"
+              />
+              <p class="text-4xl font-maven-pro text-custom-primary">
+                +591 78452415
+              </p>
+            </div>
+            <p class="text-2xl font-maven-pro text-custom-primary">
+              Aprovecha la oportunidad de modernizarte
+            </p>
+
+            <div></div>
+          </div>
+          <div class="h-[3%]"></div>
+          <!-- LOGIC : INPUT CORREO ELECTRONICO -->
+          <div
+            class="w-[80%] h-[10%] bg-custom-primary rounded-md flex flex-row gap-[2%] items-center px-4 justify-between"
+          >
+            <input
+              placeholder="Correo electronico"
+              type="text"
+              class="border-none outline-none font-maven-pro text-custom-secondary text-base w-[95%] h-[100%]"
+            />
+            <img src="assets/home-parking.svg" alt="" class="h-6 w-6" />
+          </div>
+          <!-- LOGIC : INPUT CODIGO DE PAGO -->
+          <div
+            class="w-[80%] h-[10%] bg-custom-primary rounded-md flex flex-row gap-[2%] items-center px-4 justify-between"
+          >
+            <input
+              placeholder="Codigo de pago"
+              type="text"
+              class="border-none outline-none font-maven-pro text-custom-secondary text-base w-[95%] h-[100%]"
+            />
+            <img src="assets/home-codigoPago.svg" alt="" class="h-6 w-6" />
+          </div>
+          <!-- LOGIC : INPUT CONTRASEÑA -->
+          <div
+            class="w-[80%] h-[10%] bg-custom-primary rounded-md flex flex-row gap-[2%] items-center px-4 justify-between"
+          >
+            <input
+              placeholder="Contraseña"
+              type="text"
+              class="border-none outline-none font-maven-pro text-custom-secondary text-base w-[95%] h-[100%]"
+            />
+            <img src="assets/home-password.svg" alt="" class="h-6 w-6" />
+          </div>
+          <!-- LOGIC : TELEFONO -->
+          <div
+            class="w-[80%] h-[10%] flex flex-row gap-[2%] items-center justify-between"
+          >
+            <div
+              class="w-[65%] h-[100%] bg-custom-primary rounded-md flex flex-row gap-[2%] items-center px-4 justify-between"
+            >
+              <input
+                placeholder="Telefono"
+                type="number"
+                class="border-none outline-none font-maven-pro text-custom-secondary text-base w-[95%] h-[100%]"
+              />
+              <img src="assets/home-telefono.svg" alt="" class="h-6 w-6" />
+            </div>
+            <button
+              (click)="registrarmeParking()"
+              type="submit"
+              class="font-bold h-[100%] w-[35%] rounded-md p-2 bg-custom-quinary text-custom-secondary transition duration-300 ease-in-out hover:bg-custom-quaternary hover:text-custom-primary"
+            >
+              Registrame
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- READ : SEGUNDA PARTE -->
+    <!-- src="https://circontrol.com/wp-content/uploads/2023/10/180125-Circontrol-BAIXA-10-1536x914.jpg" -->
+    <div class="h-[100%] w-full bg-red-500 relative z-10">
+      <!-- LOGIC : IMAGEN DE FONDO Y CAPA DE COLOR -->
+      <img
+        src="https://circontrol.com/wp-content/uploads/2023/10/180125-Circontrol-BAIXA-80-1-1536x885.jpg"
+        alt=""
+        class="object-cover h-[100%] w-full absolute inset-0"
+      />
+      <div
+        class="bg-black absolute inset-0 h-[100%] w-full bg-opacity-70"
+      ></div>
+      <!-- LOGIC : SERVICIOS -->
+      <div class="h-full w-full relative flex flex-col py-[3%]">
+        <div class="h-[10%] w-full flex items-start justify-center">
+          <p
+            class="font-bold font-maven-pro text-custom-primary text-4xl text-start shadow-text"
+            style="text-shadow: 0px 2px 4px #4b9ab7"
+          >
+            NUESTROS SERVICIOS
+          </p>
+        </div>
+        <div
+          class="h-[90%] w-full flex flex-row gap-[2%] items-center justify-center"
+        >
+          <div
+            class="h-[90%] w-[31%] bg-white shadow-custom-quas rounded-md p-4 flex flex-col items-center"
+          >
+            <img
+              src="assets/primerS-standard.png"
+              alt=""
+              class="w-[50%] h-[35%] object-contain mb-[5%]"
+            />
+            <p class="text-3xl font-bold font-maven-pro mb-2">
+              3 MESES - 300 Bs
+            </p>
+            <ul
+              class="text-custom-tertiary list-disc font-maven-pro list-inside text-left custom-list text-xl space-y-[1%]"
+            >
+              <li>Control Básico de Espacios</li>
+              <li>Hasta 2 Promociones Activas</li>
+              <li>Reportes Simples de Uso</li>
+              <li>Soporte por Email</li>
+              <li>Reservas Limitadas Mensuales</li>
+              <li>Pago con Tarjeta de Débito</li>
+            </ul>
+          </div>
+          <div
+            class="h-[90%] w-[31%] bg-white shadow-custom-quas rounded-md p-4 flex flex-col items-center"
+          >
+            <img
+              src="assets/primerP-6.png"
+              alt=""
+              class="w-[50%] h-[35%] object-contain mb-[5%]"
+            />
+            <p class="text-3xl font-bold font-maven-pro mb-2">
+              6 MESES - 650 Bs
+            </p>
+            <ul
+              class="text-custom-tertiary list-disc font-maven-pro list-inside text-left custom-list text-xl space-y-[1%]"
+            >
+              <li>Gestión en Tiempo Real de Espacios</li>
+              <li>Hasta 5 Promociones Activas</li>
+              <li>Reportes Detallados de Uso</li>
+              <li>Soporte Prioritario</li>
+              <li>Reservas con Anticipación</li>
+              <li>Historial de Actividad y Reservas</li>
+            </ul>
+          </div>
+          <div
+            class="h-[90%] w-[31%] bg-white shadow-custom-quas rounded-md p-4 flex flex-col items-center"
+          >
+            <img
+              src="assets/primerT-online-store.png"
+              alt=""
+              class="w-[50%] h-[35%] object-contain mb-[5%]"
+            />
+            <p class="text-3xl font-bold font-maven-pro mb-2">
+              12 MESES - 1300 Bs
+            </p>
+            <ul
+              class="text-custom-tertiary list-disc font-maven-pro list-inside text-left custom-list text-xl space-y-2"
+            >
+              <li>Monitoreo en Vivo de Espacios</li>
+              <li>Promociones Personalizadas Sin Límites</li>
+              <li>Notificaciones Automáticas de Disponibilidad</li>
+              <li>Análisis Avanzado de Comportamiento de Usuarios</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- READ : TERCER PARTE -->
+    <div
+      class="h-[100%] w-full bg-custom-secondary relative z-10 flex flex-row"
+    >
+      <div
+        class="h-full w-[60%] flex flex-col items-start justify-center gap-8 p-[5%] mr-[10%] text-custom-primary font-maven-pro"
+      >
+        <p
+          class="text-4xl font-bold text-white"
+          style="text-shadow: 0px 2px 4px #4b9ab7"
+        >
+          DESCARGAR LA APP
+        </p>
+        <section class="flex flex-row gap-16">
+          <div class="border-b-4 border-b-custom-primary text-lg px-1">
+            DETALLES
+          </div>
+          <div
+            class="px-1 border-b-4 border-b-custom-primary/60 text-custom-primary/60 hover:text-custom-primary hover:border-b-custom-primary"
+          >
+            COMO FUNCIONA
+          </div>
+        </section>
+        <p class="text-xl">
+          Descarga nuestra app y facilita tu búsqueda de estacionamiento. Solo
+          regístrate con tu nombre y correo para empezar a usarla. Accede a:
+        </p>
+        <ul
+          class="list-disc list-inside text-left custom-listt text-xl space-y-2"
+        >
+          <li>Monitoreo en Vivo de Espacios</li>
+          <li>Promociones Personalizadas Sin Límites</li>
+          <li>Notificaciones Automáticas de Disponibilidad</li>
+          <li>Análisis Avanzado de Comportamiento de Usuarios</li>
+        </ul>
+        <section class="flex flex-row gap-5">
+          <img
+            src="https://livedemo00.template-help.com/wt_prod-22320/images/button-1-170x53.png"
+            alt=""
+            class="cursor-pointer"
+          />
+          <img
+            src="https://livedemo00.template-help.com/wt_prod-22320/images/button-2-170x53.png"
+            alt=""
+            class="cursor-pointer"
+          />
+        </section>
+      </div>
+      <div class="h-full w-[40%] flex items-center justify-center">
+        <img
+          src="assets/telefonoFondo.png"
+          alt=""
+          class="object-contain h-[100%] w-[80%] mr-[20%]"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- READ : FORMULARIO DE INICIO DE SESSION -->
+  <div
+    [ngClass]="{ hidden: formLogin }"
+    #formLogin
+    class="absolute inset-0 h-full w-full bg-black bg-opacity-75 z-20 flex items-center justify-center"
+  >
+    <form
+      action=""
+      class="h-[40%] w-[27%] rounded-md border-custom-primary border-2 bg-custom-secondary p-[1.5%] items-center justify-between flex flex-col gap-[3%]"
+    >
+      <p class="text-4xl font-bold font-maven-pro text-custom-primary">
+        INICIA SESIÓN
+      </p>
+      <div
+        class="w-[90%] h-[23%] bg-custom-primary rounded-md flex flex-row gap-[2%] items-center px-4 justify-between"
+      >
+        <input
+          placeholder="Correo electronico"
+          type="text"
+          class="border-none outline-none font-maven-pro text-custom-secondary text-base w-[95%] h-[100%] bg-transparent"
+        />
+        <img src="assets/home-parking.svg" alt="" class="h-6 w-6" />
+      </div>
+      <div
+        class="w-[90%] h-[23%] bg-custom-primary rounded-md flex flex-row gap-[2%] items-center px-4 justify-between"
+      >
+        <input
+          placeholder="Contraseña"
+          type="password"
+          class="border-none outline-none font-maven-pro text-custom-secondary text-base w-[95%] h-[100%] bg-transparent"
+        />
+        <img src="assets/home-password.svg" alt="" class="h-6 w-6" />
+      </div>
+      <button
+        type="submit"
+        class="font-bold h-[22%] w-[40%] rounded-md p-2 bg-custom-quinary text-custom-secondary transition duration-300 ease-in-out hover:bg-custom-quaternary hover:text-custom-primary"
+      >
+        Iniciar sesión
+      </button>
+    </form>
+  </div>
+
+  <!-- READ :  MODAL DE MENSAJES AL CLIENTE -->
+  <div
+    [ngClass]="{ hidden: !modalVisible }"
+    #modalHTML
+    class="absolute inset-0 h-full w-full flex items-center justify-center bg-black bg-opacity-75 z-20"
+  >
+    <div
+      class="bg-custom-secondary rounded-md border-2 border-custom-primary p-[0.8%] h-[25%] w-[30%] gap-[3%] flex flex-col items-center justify-between"
+    >
+      <p
+        class="text-center font-bold font-maven-pro text-xl text-custom-primary"
+      >
+        HUBO PROBLEMAS CON LOS RESULTADOS
+      </p>
+      <img
+        src="assets/imagen-modal.png"
+        alt=""
+        class="h-[50%] w-[50%] object-contain"
+      />
+    </div>
+  </div>
+</div>
+
+<!--
+Nuestra app te permite reservar estacionamiento sin necesidad de contacto directo, además de configurar tu espacio con anticipación o seleccionar servicios extras como lavado de autos:
+
+Gestiona tus reservas fácilmente.
+Paga sin necesidad de efectivo o tarjeta.
+Descuentos especiales para usuarios frecuentes. -->

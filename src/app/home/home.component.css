@@ -1,0 +1,32 @@
+.fondoFigura {
+  position: absolute;
+  top: 0;
+  left: 30%;
+  width:  70%;
+  height: 100%;
+  background-color: #313539;
+  clip-path: polygon(55% 0, 100% 0%, 100% 100%, 41% 100%, 26% 23%);
+}
+
+
+button:hover span.relative {
+  color: #F0D097; /* Reemplaza con tu color secundario personalizado */
+}
+
+.custom-list li::marker {
+  color: #4B9AB7; /* Reemplaza con el color hexadecimal que desees */
+}
+
+.custom-list {
+  list-style-position: outside; /* Asegura que los puntos estén fuera del contenido */
+}
+
+.custom-list li {
+  margin-left: 1rem; /* Ajusta el margen izquierdo para alinear el texto con los puntos */
+}
+
+
+
+.custom-listt li::marker {
+  color: #F7E12C; /* Color amarillo en formato hexadecimal */
+}

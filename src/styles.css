@@ -1,0 +1,26 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Maven+Pro:wght@400..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados para la barra de desplazamiento */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 12px; /* Ancho de la barra de desplazamiento */
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent; /* Fondo transparente de la barra de desplazamiento */
+  border-radius: 6px; /* Bordes redondeados */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #4B9AB7; /* Color del pulgar de la barra de desplazamiento */
+  border-radius: 6px; /* Bordes redondeados */
+  border: 3px solid #313539; /* Espacio alrededor del pulgar */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #7B7E80; /* Color del pulgar al pasar el ratón por encima */
+}

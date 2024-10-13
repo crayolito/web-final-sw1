@@ -1,0 +1,218 @@
+<div class="w-[100%] h-[100%] flex flex-row">
+  <section
+    class="h-full w-[55%] flex-col flex items-center justify-between gap-[5%]"
+  >
+    <div
+      class="w-full h-[55%] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-[1%] px-[1.5%] gap-[2%] flex flex-col justify-between"
+    >
+      <p
+        class="font-maven-pro font-bold text-xl text-custom-secondary"
+        style="text-shadow: 1px 1px 4px #7b7e80"
+      >
+        INFORMACION BASICA
+      </p>
+      <section class="h-[20%] w-full flex flex-row gap-[1.5%]">
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Nombre Parking"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Cant. Espacios"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Horario Atencion "
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+      </section>
+      <section class="h-[20%] w-full flex flex-row gap-[1.5%]">
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Correo Electronico"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Contraseña"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Telefono"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+      </section>
+      <section class="h-[20%] w-full flex flex-row gap-[1.5%]">
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Direccion"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Coordenadas X,Y"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="URL Google Maps"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+      </section>
+      <section class="h-[15%] w-full flex flex-row gap-[1.5%]">
+        <button
+          class="bg-custom-tertiary/40 rounded-full p-1 w-[5.6%] flex items-center justify-center"
+        >
+          <img src="assets/view.svg" alt="" class="h-6 w-6" />
+        </button>
+        <button
+          class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar w-[5.6%] flex items-center justify-center"
+        >
+          <img src="assets/guardarDatos.svg" alt="" class="h-6 w-6" />
+        </button>
+      </section>
+    </div>
+    <div
+      class="w-full h-[45%] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-[1%] px-[1.5%] gap-[3%] flex flex-col"
+    >
+      <div
+        #map
+        class="h-[100%] w-full rounded-md shadow-custom-option-dashboar"
+      ></div>
+    </div>
+  </section>
+  <section
+    class="h-full w-[45%] flex-col pl-[1.5%] flex items-center justify-between gap-[5%]"
+  >
+    <div
+      class="w-full h-[55%] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-[1%] px-[2%] gap-[3%] flex flex-col"
+    >
+      <p
+        class="font-maven-pro font-bold text-xl text-custom-secondary"
+        style="text-shadow: 1px 1px 4px #7b7e80"
+      >
+        PAQUETES DE SERVICIOS
+      </p>
+      <section
+        class="flex flex-row h-[14%] items-center justify-between gap-[3%]"
+      >
+        <div
+          class="bg-custom-secondary h-[100%] w-[45%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Nombre "
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[100%] w-[30%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            placeholder="Precio"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div class="flex flex-row gap-6 w-[50%] justify-end">
+          <button
+            class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar"
+          >
+            <img src="assets/create.svg" alt="" class="h-6 w-6" />
+          </button>
+          <button
+            class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar"
+          >
+            <img src="assets/search.svg" alt="" class="h-6 w-6" />
+          </button>
+        </div>
+      </section>
+      <section class="h-[80%] w-full gap-1 overflow-y-auto custom-scrollbar">
+        <!-- READ : ELEMENTO -->
+        <div
+          class="h-[22%] w-full flex flex-row items-center mb-1 text-custom-secondary"
+        >
+          <div
+            class="rounded-full h-[20%] w-[1.7%] bg-custom-quaternary mr-[2%]"
+          ></div>
+          <div class="h-full w-[60%] flex items-center">
+            <p
+              class="text-xl font-maven-pro truncate overflow-hidden whitespace-nowrap"
+            >
+              Paquete 4 horas de parking
+            </p>
+          </div>
+          <div class="h-full w-[20%] flex items-center justify-center">
+            <p class="text-xl font-maven-pro">40 Bs</p>
+          </div>
+          <div class="h-full w-[20%] flex flex-row justify-evenly items-center">
+            <img
+              src="assets/editar.svg"
+              alt=""
+              class="cursor-pointer object-contain h-6 w-6"
+            />
+            <img
+              src="assets/delete.svg"
+              alt=""
+              class="cursor-pointer object-contain h-6 w-6"
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+    <div
+      class="w-full h-[45%] flex items-center gap-[5%] justify-center flex-col border-2 border-custom-secondary/20 rounded-md"
+    >
+      <img
+        src="assets/subir-imagen.png"
+        alt=""
+        class="h-[50%] w-[30%] object-contain cursor-pointer"
+      />
+      <p
+        class="font-bold font-maven-pro text-xl text-custom-secondary"
+        style="text-shadow: 1px 1px 4px #7b7e80"
+      >
+        Subir una imagen 1500x1000
+      </p>
+    </div>
+  </section>
+</div>

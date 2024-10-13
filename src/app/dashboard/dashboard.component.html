@@ -1,0 +1,83 @@
+<div
+  class="h-screen w-screen bg-custom-secondary flex flex-row py-[1%] pr-[1%]"
+>
+  <div
+    class="h-full w-[6%] flex flex-col gap-[5%] justify-between items-center mr-[1%]"
+  >
+    <img
+      src="assets/parking-logo.svg"
+      alt=""
+      class="h-12 w-12 object-contain cursor-pointer"
+    />
+    <div class="h-[7%] w-[1%]"></div>
+    @for(option of options ; track options ){
+    <div
+      [ngClass]="
+        option.ruta == estadoDashboard.ruta
+          ? 'rounded-full border-custom-primary bg-custom-tertiary border-2 p-[7%]'
+          : ''
+      "
+      (click)="cambiarEstadoDashboard(option)"
+      class="cursor-pointer transition-transform duration-300 ease-in-out transform hover:scale-110"
+    >
+      <img src="{{ option.img }}" alt="" class="h-8 w-8 object-cover" />
+    </div>
+    }
+
+    <div class="h-[7%] w-[1%]"></div>
+    <img
+      (click)="cerrarSesion()"
+      src="assets/option-logout.svg"
+      alt=""
+      class="h-8 w-8 object-contain cursor-pointer"
+    />
+  </div>
+  <div
+    class="h-full w-[94%] rounded-lg bg-custom-primary relative shadow-custom-dashboard flex flex-col gap-[3%] p-[1%]"
+  >
+    <div
+      class="h-[8%] w-full items-center rounded-md flex flex-row gap-[2%] px-4 justify-between"
+    >
+      <p class="text-3xl cursor-pointer">
+        <span class="font-bold" style="text-shadow: 2px 2px 4px #7b7e80"
+          >EasyPark</span
+        >
+      </p>
+      <section
+        class="text-right font-bold flex flex-row items-center justify-end gap-4 w-[70%]"
+      >
+        <p class="text-lg">12/10/2024 - 18:11</p>
+        <button
+          class="bg-custom-tertiary/25 rounded-full p-[1%] shadow-custom-option-dashboar"
+        >
+          <img src="assets/notificacion.svg" alt="" />
+        </button>
+        <button
+          class="bg-custom-tertiary/25 rounded-full p-[1%] shadow-custom-option-dashboar"
+        >
+          <img src="assets/reporte-cuenta.svg" alt="" />
+        </button>
+        <button class="">
+          <img src="assets/modo-light.svg" alt="" />
+        </button>
+        <button
+          type="submit"
+          class="font-bold h-[22%] rounded-md py-2 px-3 bg-custom-quinary shadow-custom-option-dashboar text-custom-secondary transition duration-300 ease-in-out hover:bg-custom-quaternary hover:text-custom-primary"
+        >
+          Soporte Técnico
+        </button>
+      </section>
+    </div>
+    <div class="h-[92%] w-full">
+      <router-outlet />
+    </div>
+    <!-- <img
+      src="https://www.arqhys.com/wp-content/uploads/2012/12/Diseno-de-estacionamientos-10.jpg"
+      alt=""
+      class="absolute inset-0 h-full w-full object-cover rounded-lg"
+    />
+    <div
+      class="bg-black absolute inset-0 h-full w-full rounded-lg bg-opacity-65 shadow-custom-dashboard"
+    ></div> -->
+  </div>
+</div>
