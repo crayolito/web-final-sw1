@@ -24,6 +24,12 @@ export const routes: Routes = [
             (m) => m.default
           ),
       },
+      {
+        path: 'extra',
+        title: 'Extra',
+        loadComponent: () =>
+          import('./dashboard/extra/extra.component').then((m) => m.default),
+      },
     ],
   },
   {

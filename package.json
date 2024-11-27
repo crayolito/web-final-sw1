@@ -21,6 +21,7 @@
     "mapbox-gl": "^3.7.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
+    "web-sw1": "file:",
     "zone.js": "~0.14.10"
   },
   "devDependencies": {

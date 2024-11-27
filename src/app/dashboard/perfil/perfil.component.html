@@ -2,7 +2,8 @@
   <section
     class="h-full w-[55%] flex-col flex items-center justify-between gap-[5%]"
   >
-    <div
+    <form
+      [formGroup]="perfilForm"
       class="w-full h-[55%] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-[1%] px-[1.5%] gap-[2%] flex flex-col justify-between"
     >
       <p
@@ -16,6 +17,7 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="nombreParking"
             placeholder="Nombre Parking"
             type="text"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
@@ -25,8 +27,9 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="cantEspacios"
             placeholder="Cant. Espacios"
-            type="text"
+            type="number"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
         </div>
@@ -34,7 +37,8 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
-            placeholder="Horario Atencion "
+            formControlName="horarioAtencion"
+            placeholder="Horario Atencion"
             type="text"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
@@ -45,8 +49,9 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="correoElectronico"
             placeholder="Correo Electronico"
-            type="text"
+            type="email"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
         </div>
@@ -54,8 +59,9 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="contrasena"
             placeholder="Contraseña"
-            type="text"
+            type="password"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
         </div>
@@ -63,8 +69,9 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="telefono"
             placeholder="Telefono"
-            type="text"
+            type="tel"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
         </div>
@@ -74,6 +81,7 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="direccion"
             placeholder="Direccion"
             type="text"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
@@ -83,6 +91,7 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="coordenadas"
             placeholder="Coordenadas X,Y"
             type="text"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
@@ -92,25 +101,39 @@
           class="bg-custom-secondary h-[100%] w-[32%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
+            formControlName="urlGoogleMaps"
             placeholder="URL Google Maps"
-            type="text"
+            type="url"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
         </div>
       </section>
       <section class="h-[15%] w-full flex flex-row gap-[1.5%]">
         <button
-          class="bg-custom-tertiary/40 rounded-full p-1 w-[5.6%] flex items-center justify-center"
+          (click)="OnChangedEstadoForm()"
+          [ngClass]="
+            estadoForm() ? 'rounded-full p-1 shadow-custom-option-dashboar' : ''
+          "
+          class="bg-custom-tertiary/25 rounded-full p-1 w-[5.6%] flex items-center justify-center"
         >
-          <img src="assets/view.svg" alt="" class="h-6 w-6" />
+          <img
+            [src]="estadoForm() ? 'assets/view.svg' : 'assets/editar.svg'"
+            [alt]="estadoForm() ? 'Ver' : 'Editar'"
+            [title]="estadoForm() ? 'Modo visualización' : 'Modo edición'"
+            class="h-6 w-6 cursor-pointer"
+          />
         </button>
         <button
+          [disabled]="estadoForm()"
+          (click)="guardarPerfil()"
           class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar w-[5.6%] flex items-center justify-center"
+          [ngClass]="{ 'opacity-50': estadoForm() }"
         >
           <img src="assets/guardarDatos.svg" alt="" class="h-6 w-6" />
         </button>
       </section>
-    </div>
+    </form>
+
     <div
       class="w-full h-[45%] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-[1%] px-[1.5%] gap-[3%] flex flex-col"
     >
@@ -120,99 +143,168 @@
       ></div>
     </div>
   </section>
+
   <section
     class="h-full w-[45%] flex-col pl-[1.5%] flex items-center justify-between gap-[5%]"
   >
     <div
-      class="w-full h-[55%] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-[1%] px-[2%] gap-[3%] flex flex-col"
+      class="w-full h-[270px] border-2 border-custom-secondary border-custom-secondary/20 rounded-md py-3 px-4 flex flex-col"
     >
       <p
         class="font-maven-pro font-bold text-xl text-custom-secondary"
         style="text-shadow: 1px 1px 4px #7b7e80"
       >
-        PAQUETES DE SERVICIOS
+        REGLAS DEL ESTACIONAMIENTO
       </p>
-      <section
+
+      <form
+        [formGroup]="reglaForm"
+        (ngSubmit)="guardarRegla()"
         class="flex flex-row h-[14%] items-center justify-between gap-[3%]"
       >
         <div
           class="bg-custom-secondary h-[100%] w-[45%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
         >
           <input
-            placeholder="Nombre "
+            formControlName="descripcion"
+            placeholder="Descripcion"
             type="text"
             class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
           />
         </div>
+
         <div
-          class="bg-custom-secondary h-[100%] w-[30%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+          class="relative bg-custom-secondary h-[100%] w-[30%] rounded-sm shadow-custom-option-dashboar"
         >
-          <input
-            placeholder="Precio"
-            type="text"
-            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
-          />
+          <select
+            formControlName="categoria"
+            class="appearance-none w-full h-full px-3 bg-transparent font-maven-pro text-custom-primary text-base cursor-pointer border-none outline-none"
+          >
+            <option value="" disabled selected>Categoría</option>
+            <option
+              *ngFor="let cat of categorias"
+              [value]="cat.display"
+              class="bg-gray-800 text-white py-2"
+            >
+              {{ cat.display }}
+            </option>
+          </select>
+          <div
+            class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"
+          >
+            <svg
+              class="h-4 w-4 text-custom-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
         </div>
+
         <div class="flex flex-row gap-6 w-[50%] justify-end">
           <button
+            type="submit"
             class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar"
           >
             <img src="assets/create.svg" alt="" class="h-6 w-6" />
           </button>
           <button
+            type="button"
             class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar"
           >
             <img src="assets/search.svg" alt="" class="h-6 w-6" />
           </button>
         </div>
-      </section>
-      <section class="h-[80%] w-full gap-1 overflow-y-auto custom-scrollbar">
-        <!-- READ : ELEMENTO -->
+      </form>
+
+      <section class="h-[80%] w-full overflow-y-auto custom-scrollbar">
         <div
-          class="h-[22%] w-full flex flex-row items-center mb-1 text-custom-secondary"
+          *ngFor="let regla of reglas; let i = index"
+          class="group h-[60px] w-full flex items-center gap-4 py-2 px-4 hover:bg-custom-secondary/5 transition-all duration-200 rounded-sm mb-2"
         >
-          <div
-            class="rounded-full h-[20%] w-[1.7%] bg-custom-quaternary mr-[2%]"
-          ></div>
-          <div class="h-full w-[60%] flex items-center">
+          <!-- Punto de categoría -->
+          <div class="flex items-center justify-center">
+            <div
+              [ngStyle]="{ 'background-color': regla.color }"
+              class="w-2 h-2 rounded-full transform group-hover:scale-125 transition-transform duration-200"
+            ></div>
+          </div>
+
+          <!-- Descripción -->
+          <div class="flex-grow min-w-0">
             <p
-              class="text-xl font-maven-pro truncate overflow-hidden whitespace-nowrap"
+              class="text-base font-maven-pro text-custom-secondary line-clamp-2"
             >
-              Paquete 4 horas de parking
+              {{ regla.descripcion }}
             </p>
           </div>
-          <div class="h-full w-[20%] flex items-center justify-center">
-            <p class="text-xl font-maven-pro">40 Bs</p>
+
+          <!-- Categoría -->
+          <div class="flex-shrink-0 min-w-[100px] text-right">
+            <span
+              [ngStyle]="{ color: regla.color }"
+              class="font-maven-pro text-sm font-medium"
+            >
+              {{ regla.categoria }}
+            </span>
           </div>
-          <div class="h-full w-[20%] flex flex-row justify-evenly items-center">
-            <img
-              src="assets/editar.svg"
-              alt=""
-              class="cursor-pointer object-contain h-6 w-6"
-            />
-            <img
-              src="assets/delete.svg"
-              alt=""
-              class="cursor-pointer object-contain h-6 w-6"
-            />
+
+          <!-- Botones de acción con tamaño fijo -->
+          <div class="flex items-center gap-2">
+            <button
+              (click)="editarRegla(i)"
+              class="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
+            >
+              <img src="assets/editar.svg" alt="Editar" class="w-6 h-6" />
+            </button>
+            <button
+              (click)="eliminarRegla(i)"
+              class="w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform"
+            >
+              <img src="assets/delete.svg" alt="Eliminar" class="w-6 h-6" />
+            </button>
           </div>
         </div>
       </section>
     </div>
-    <div
-      class="w-full h-[45%] flex items-center gap-[5%] justify-center flex-col border-2 border-custom-secondary/20 rounded-md"
+
+    <label
+      for="fileUpload"
+      class="w-full h-[45%] flex items-center gap-[5%] justify-center flex-col border-2 border-custom-secondary/20 rounded-md cursor-pointer relative overflow-hidden"
     >
-      <img
-        src="assets/subir-imagen.png"
-        alt=""
-        class="h-[50%] w-[30%] object-contain cursor-pointer"
-      />
+      <div class="absolute inset-0 flex items-center justify-center">
+        <img
+          [src]="imageEmpresa()"
+          alt=""
+          [class]="
+            estadoImagen()
+              ? 'w-full h-full object-contain rounded-md'
+              : 'h-[50%] w-[30%] object-contain'
+          "
+          style="max-width: 100%; max-height: 100%"
+        />
+      </div>
       <p
-        class="font-bold font-maven-pro text-xl text-custom-secondary"
-        style="text-shadow: 1px 1px 4px #7b7e80"
+        *ngIf="!estadoImagen()"
+        class="font-bold font-maven-pro text-xl text-custom-secondary absolute bottom-3"
+        style="text-shadow: 1px 1px 4px #008005"
       >
         Subir una imagen 1500x1000
       </p>
-    </div>
+      <input
+        id="fileUpload"
+        type="file"
+        class="hidden"
+        (change)="seleccionarImagen($event)"
+        accept="image/*"
+      />
+    </label>
   </section>
 </div>

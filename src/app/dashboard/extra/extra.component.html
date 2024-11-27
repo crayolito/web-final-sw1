@@ -1,0 +1,299 @@
+<div class="w-[100%] h-[100%] flex flex-row gap-[2%]">
+  <!-- Servicios y Tarifas (70%) -->
+  <section
+    class="h-full w-[70%] flex-col flex items-center justify-between gap-[2%]"
+  >
+    <form
+      [formGroup]="servicioForm"
+      class="w-full h-[30%] border-2 border-custom-secondary/20 rounded-md py-[1%] px-[1.5%] gap-[2%] flex flex-col justify-between"
+    >
+      <p
+        class="font-maven-pro font-bold text-xl text-custom-secondary"
+        style="text-shadow: 1px 1px 4px #7b7e80"
+      >
+        SERVICIOS Y TARIFAS
+      </p>
+      <section class="h-[45%] w-full flex flex-row gap-[1.5%]">
+        <div
+          class="bg-custom-secondary h-[90%] w-[30%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            formControlName="nombre"
+            placeholder="Nombre del servicio"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="relative bg-custom-secondary h-[90%] w-[30%] rounded-sm shadow-custom-option-dashboar"
+        >
+          <select
+            formControlName="categoria"
+            class="appearance-none w-full h-full px-3 bg-transparent font-maven-pro text-custom-primary text-base cursor-pointer border-none outline-none"
+          >
+            <option value="" disabled selected>Categoría</option>
+            <option
+              *ngFor="let categoria of categoriasServicio"
+              [value]="categoria"
+              class="bg-gray-800 text-white py-2"
+            >
+              {{ categoria }}
+            </option>
+          </select>
+          <div
+            class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"
+          >
+            <svg
+              class="h-4 w-4 text-custom-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="bg-custom-secondary h-[90%] w-[20%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            formControlName="precio"
+            placeholder="Precio"
+            type="number"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="bg-custom-secondary h-[90%] w-[20%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            formControlName="descuento"
+            placeholder="Descuento %"
+            type="number"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+      </section>
+      <section
+        class="h-[15%] w-full flex flex-row items-center gap-[1.5%] my-2"
+      >
+        <button
+          (click)="guardarServicio()"
+          title="Guardar Servicio"
+          class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar min-w-[35px] min-h-[35px] flex items-center justify-center hover:bg-custom-tertiary/40 hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+        >
+          <img
+            src="assets/create.svg"
+            alt="Guardar"
+            class="h-5 w-5 transition-transform duration-300 ease-in-out hover:rotate-12"
+          />
+        </button>
+      </section>
+    </form>
+
+    <!-- Lista de Servicios -->
+    <div
+      class="w-full h-[73%] border-2 border-custom-secondary/20 rounded-md flex flex-col"
+    >
+      <!-- Cabecera de la tabla -->
+      <div
+        class="h-[15%] w-full bg-custom-secondary rounded-t-md border-b-2 border-custom-tertiary/50 flex flex-row items-center shadow-custom-option-dashboar"
+      >
+        <div
+          class="w-[25%] font-bold font-maven-pro text-custom-primary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
+        >
+          Nombre
+        </div>
+        <div
+          class="w-[35%] font-bold font-maven-pro text-custom-primary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
+        >
+          Categoría
+        </div>
+        <div
+          class="w-[15%] font-bold font-maven-pro text-custom-primary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
+        >
+          Precio
+        </div>
+        <div
+          class="w-[15%] font-bold font-maven-pro text-custom-primary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
+        >
+          Descuento
+        </div>
+        <div
+          class="w-[10%] font-bold font-maven-pro text-custom-primary h-[100%] flex items-center justify-center"
+        >
+          Acciones
+        </div>
+      </div>
+
+      <!-- Contenido de la tabla con scroll -->
+      <div class="flex-1 overflow-y-auto custom-scrollbar">
+        <div
+          *ngFor="let servicio of servicios; let i = index"
+          class="w-full flex flex-row items-center hover:bg-custom-secondary/5 border-b border-custom-tertiary/20"
+        >
+          <div
+            class="w-[25%] font-maven-pro text-custom-secondary py-4 px-4 border-r border-custom-tertiary/20"
+          >
+            {{ servicio.nombre }}
+          </div>
+          <div
+            class="w-[35%] font-maven-pro text-custom-secondary py-4 px-4 border-r border-custom-tertiary/20"
+          >
+            {{ servicio.categoria }}
+          </div>
+          <div
+            class="w-[15%] font-maven-pro text-custom-secondary py-4 px-4 border-r border-custom-tertiary/20 text-center"
+          >
+            {{ servicio.precio }} Bs
+          </div>
+          <div
+            class="w-[15%] font-maven-pro text-custom-secondary py-4 px-4 border-r border-custom-tertiary/20 text-center"
+          >
+            {{ servicio.descuento }}%
+          </div>
+          <div class="w-[10%] flex justify-center gap-2">
+            <button
+              (click)="editarServicio(i)"
+              class="p-1 hover:scale-110 transition-transform"
+            >
+              <img src="assets/editar.svg" alt="Editar" class="w-6 h-6" />
+            </button>
+            <button
+              (click)="eliminarServicio(i)"
+              class="p-1 hover:scale-110 transition-transform"
+            >
+              <img src="assets/delete.svg" alt="Eliminar" class="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comunicados (30%) -->
+  <section
+    class="h-full w-[30%] flex-col flex items-center justify-between gap-[2%]"
+  >
+    <form
+      [formGroup]="comunicadoForm"
+      class="w-full h-[30%] border-2 border-custom-secondary/20 rounded-md py-[1%] px-[1.5%] gap-[2%] flex flex-col justify-between"
+    >
+      <p
+        class="font-maven-pro font-bold text-xl text-custom-secondary"
+        style="text-shadow: 1px 1px 4px #7b7e80"
+      >
+        COMUNICADOS
+      </p>
+      <section class="h-[45%] w-full flex flex-row gap-[4%]">
+        <div
+          class="bg-custom-secondary h-[80%] flex flex-row rounded-sm px-2 shadow-custom-option-dashboar"
+        >
+          <input
+            formControlName="contenido"
+            placeholder="Contenido"
+            type="text"
+            class="border-none outline-none bg-transparent font-maven-pro text-custom-primary text-base w-[95%] h-[100%]"
+          />
+        </div>
+        <div
+          class="relative bg-custom-secondary h-[80%] rounded-sm shadow-custom-option-dashboar"
+        >
+          <select
+            formControlName="tipo"
+            class="appearance-none w-full h-full px-3 bg-transparent font-maven-pro text-custom-primary text-base cursor-pointer border-none outline-none"
+          >
+            <option value="" disabled selected>Comunicado</option>
+            <option
+              *ngFor="let tipo of tiposComunicado"
+              [value]="tipo"
+              class="bg-gray-800 text-white py-2"
+            >
+              {{ tipo }}
+            </option>
+          </select>
+          <div
+            class="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none"
+          >
+            <svg
+              class="h-4 w-4 text-custom-primary"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="h-[15%] w-full flex flex-row items-center gap-[1.5%] my-2"
+      >
+        <button
+          (click)="guardarComunicado()"
+          title="Guardar Servicio"
+          class="bg-custom-tertiary/25 rounded-full p-1 shadow-custom-option-dashboar min-w-[35px] min-h-[35px] flex items-center justify-center hover:bg-custom-tertiary/40 hover:shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+        >
+          <img
+            src="assets/create.svg"
+            alt="Guardar"
+            class="h-5 w-5 transition-transform duration-300 ease-in-out hover:rotate-12"
+          />
+        </button>
+      </section>
+    </form>
+
+    <!-- Lista de Comunicados -->
+    <div
+      class="w-full h-[73%] border-2 border-custom-secondary/20 rounded-md flex flex-col"
+    >
+      <div class="flex-1 overflow-y-auto custom-scrollbar p-4">
+        <div
+          *ngFor="let comunicado of comunicados; let i = index"
+          class="mb-4 bg-custom-secondary/5 rounded-md p-4 hover:bg-custom-secondary/10"
+        >
+          <div class="flex justify-between items-start mb-2">
+            <span
+              [ngClass]="{
+                'text-red-500': comunicado.tipo === 'Cierre Programado',
+                'text-yellow-500': comunicado.tipo === 'Cambio en el Servicio',
+                'text-blue-500': comunicado.tipo === 'Alerta Importante'
+              }"
+              class="text-sm font-maven-pro font-bold"
+            >
+              {{ comunicado.tipo }}
+            </span>
+            <div class="flex gap-2">
+              <button
+                (click)="editarComunicado(i)"
+                class="p-1 hover:scale-110 transition-transform"
+              >
+                <img src="assets/editar.svg" alt="Editar" class="w-5 h-5" />
+              </button>
+              <button
+                (click)="eliminarComunicado(i)"
+                class="p-1 hover:scale-110 transition-transform"
+              >
+                <img src="assets/delete.svg" alt="Eliminar" class="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+          <p class="text-custom-secondary font-maven-pro">
+            {{ comunicado.contenido }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

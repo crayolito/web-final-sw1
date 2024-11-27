@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+import { ModalComponent } from '../shared/components/modal/modal.component';
 
 interface OptionDashboard {
   img: string;
@@ -10,8 +11,9 @@ interface OptionDashboard {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [RouterModule, CommonModule],
+  imports: [RouterModule, CommonModule, ModalComponent],
   templateUrl: './dashboard.component.html',
+
   styleUrl: './dashboard.component.css',
 })
 export default class DashboardComponent {
@@ -27,7 +29,7 @@ export default class DashboardComponent {
     },
     {
       img: 'assets/opcion-config.svg',
-      ruta: 'dashboard/config',
+      ruta: 'dashboard/extra',
     },
     {
       img: 'assets/opcion-calendario.svg',
