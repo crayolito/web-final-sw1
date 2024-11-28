@@ -53,6 +53,7 @@
           <img src="assets/notificacion.svg" alt="" />
         </button>
         <button
+          (click)="openModal()"
           class="bg-custom-tertiary/25 rounded-full p-[1%] shadow-custom-option-dashboar"
         >
           <img src="assets/reporte-cuenta.svg" alt="" />
@@ -74,4 +75,80 @@
   </div>
 
   <app-modal />
+
+  <div class="dashboard-container">
+    <!-- Resto de tu contenido del dashboard -->
+
+    <!-- Modal -->
+    <div
+      *ngIf="showModal"
+      class="fixed inset-0 z-[9999] flex items-center justify-center"
+    >
+      <!-- Overlay -->
+      <div
+        class="fixed inset-0 bg-black bg-opacity-50"
+        (click)="showModal = false"
+      ></div>
+
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg p-6 w-full max-w-md mx-4">
+        <!-- Header -->
+        <div class="text-center mb-6">
+          <h3 class="text-lg font-semibold">Selecciona tu Plan</h3>
+          <p class="text-gray-600">
+            Escoge el plan que mejor se adapte a tus necesidades
+          </p>
+        </div>
+
+        <!-- Image -->
+        <div class="flex justify-center mb-6">
+          <img
+            [src]="selectedPlan?.imagen || planes[0].imagen"
+            alt="Plan imagen"
+            class="w-32 h-32 object-cover rounded-lg"
+          />
+        </div>
+
+        <!-- Price and Time -->
+        <div class="text-center mb-6">
+          <p class="text-2xl font-bold text-blue-600">
+            S/. {{ selectedPlan?.precio || planes[0].precio }}
+          </p>
+          <p class="text-gray-600">
+            {{ selectedPlan?.tiempo || planes[0].tiempo }}
+          </p>
+        </div>
+
+        <!-- Select -->
+        <div class="mb-6">
+          <select
+            (change)="onPlanSelect($event)"
+            class="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="" disabled selected>Selecciona un plan</option>
+            <option *ngFor="let plan of planes" [value]="plan.id">
+              {{ plan.tiempo }} - {{ plan.precio }} Bs
+            </option>
+          </select>
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex gap-4">
+          <button
+            (click)="confirmarPlan()"
+            [disabled]="!selectedPlan"
+            class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Confirmar Plan
+          </button>
+          <button
+            (click)="showModal = false"
+            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

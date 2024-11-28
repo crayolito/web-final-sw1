@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { HomeService } from '../../home/home.service';
 import { ModalService } from '../../shared/components/modal/modal.service';
 import { Comunicado, ExtraService, Servicio } from './extra.service';
 
@@ -32,9 +33,11 @@ import { Comunicado, ExtraService, Servicio } from './extra.service';
 export default class ExtraComponent implements OnInit, OnDestroy {
   private fb = inject(FormBuilder);
   private extraService = inject(ExtraService);
+  private homeService = inject(HomeService);
   private modalService = inject(ModalService);
   private subscriptions: Subscription = new Subscription();
 
+  private parkingId: string = '';
   public servicios: Servicio[] = [];
   public comunicados: Comunicado[] = [];
   public servicioEnEdicion: string | null = null;
@@ -101,48 +104,96 @@ export default class ExtraComponent implements OnInit, OnDestroy {
   }
 
   private cargarDatosIniciales(): void {
-    const serviciosSub = this.extraService.getServicios().subscribe({
-      next: (servicios) => (this.servicios = servicios),
-      error: (error) => {
-        console.error('Error al cargar servicios:', error);
-        this.mostrarError('Error al cargar los servicios');
-      },
-    });
+    // Intentar obtener datos del signal primero
+    let info = this.homeService.empresaInfo();
 
-    const comunicadosSub = this.extraService.getComunicados().subscribe({
-      next: (comunicados) => (this.comunicados = comunicados),
-      error: (error) => {
-        console.error('Error al cargar comunicados:', error);
-        this.mostrarError('Error al cargar los comunicados');
-      },
-    });
+    if (info) {
+      this.inicializarDatos(info);
+    } else {
+      // Si no hay datos en el signal, intentar obtener del localStorage
+      const storedData = localStorage.getItem('empresaInfo');
+      if (storedData) {
+        try {
+          info = JSON.parse(storedData);
+          this.inicializarDatos(info);
+        } catch (error) {
+          console.error('Error al parsear datos del localStorage:', error);
+          this.mostrarError(
+            'No se encontraron datos pre almacenados de la empresa'
+          );
+        }
+      } else {
+        this.mostrarError('No se encontraron datos de la empresa');
+      }
+    }
+  }
 
-    this.subscriptions.add(serviciosSub);
-    this.subscriptions.add(comunicadosSub);
+  private inicializarDatos(info: any): void {
+    this.parkingId = info.idParking;
+
+    if (info.ofertas) {
+      this.servicios = info.ofertas;
+    }
+
+    if (info.comunicados) {
+      this.comunicados = info.comunicados;
+    }
+
+    // Cargar datos actualizados del servidor
+    this.obtenerServicios();
+    this.obtenerComunicados();
   }
 
   guardarServicio(): void {
-    if (this.servicioForm.valid) {
+    if (this.servicioForm.valid && this.parkingId) {
       const servicioData = this.servicioForm.value;
+
       const sub = (
         this.servicioEnEdicion
           ? this.extraService.updateServicio(
               this.servicioEnEdicion,
-              servicioData
+              servicioData,
+              this.parkingId
             )
-          : this.extraService.createServicio(servicioData)
+          : this.extraService.createServicio(servicioData, this.parkingId)
       ).subscribe({
-        next: (servicio) => {
-          if (servicio) {
-            this.obtenerServicios();
-            this.servicioForm.reset();
-            this.servicioEnEdicion = null;
-            this.mostrarExito('Servicio guardado exitosamente');
-          }
+        next: (servicios) => {
+          this.servicios = servicios; // Actualizamos directamente con la lista retornada
+          this.servicioForm.reset();
+          this.servicioEnEdicion = null;
+          this.mostrarExito('Servicio guardado exitosamente');
         },
         error: (error) => {
           console.error('Error al guardar servicio:', error);
           this.mostrarError('Error al guardar el servicio');
+        },
+      });
+      this.subscriptions.add(sub);
+    }
+  }
+
+  guardarComunicado(): void {
+    if (this.comunicadoForm.valid && this.parkingId) {
+      const comunicadoData = this.comunicadoForm.value;
+
+      const sub = (
+        this.comunicadoEnEdicion
+          ? this.extraService.updateComunicado(
+              this.comunicadoEnEdicion,
+              comunicadoData,
+              this.parkingId
+            )
+          : this.extraService.createComunicado(comunicadoData, this.parkingId)
+      ).subscribe({
+        next: (comunicados) => {
+          this.comunicados = comunicados; // Actualizamos directamente con la lista retornada
+          this.comunicadoForm.reset();
+          this.comunicadoEnEdicion = null;
+          this.mostrarExito('Comunicado guardado exitosamente');
+        },
+        error: (error) => {
+          console.error('Error al guardar comunicado:', error);
+          this.mostrarError('Error al guardar el comunicado');
         },
       });
       this.subscriptions.add(sub);
@@ -157,53 +208,6 @@ export default class ExtraComponent implements OnInit, OnDestroy {
     }
   }
 
-  eliminarServicio(index: number): void {
-    const servicio = this.servicios[index];
-    if (servicio) {
-      const sub = this.extraService.deleteServicio(servicio.id).subscribe({
-        next: (success) => {
-          if (success) {
-            this.obtenerServicios();
-            this.mostrarExito('Servicio eliminado exitosamente');
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar servicio:', error);
-          this.mostrarError('Error al eliminar el servicio');
-        },
-      });
-      this.subscriptions.add(sub);
-    }
-  }
-
-  guardarComunicado(): void {
-    if (this.comunicadoForm.valid) {
-      const comunicadoData = this.comunicadoForm.value;
-      const sub = (
-        this.comunicadoEnEdicion
-          ? this.extraService.updateComunicado(
-              this.comunicadoEnEdicion,
-              comunicadoData
-            )
-          : this.extraService.createComunicado(comunicadoData)
-      ).subscribe({
-        next: (comunicado) => {
-          if (comunicado) {
-            this.obtenerComunicados();
-            this.comunicadoForm.reset();
-            this.comunicadoEnEdicion = null;
-            this.mostrarExito('Comunicado guardado exitosamente');
-          }
-        },
-        error: (error) => {
-          console.error('Error al guardar comunicado:', error);
-          this.mostrarError('Error al guardar el comunicado');
-        },
-      });
-      this.subscriptions.add(sub);
-    }
-  }
-
   editarComunicado(index: number): void {
     const comunicado = this.comunicados[index];
     if (comunicado) {
@@ -212,27 +216,10 @@ export default class ExtraComponent implements OnInit, OnDestroy {
     }
   }
 
-  eliminarComunicado(index: number): void {
-    const comunicado = this.comunicados[index];
-    if (comunicado) {
-      const sub = this.extraService.deleteComunicado(comunicado.id).subscribe({
-        next: (success) => {
-          if (success) {
-            this.obtenerComunicados();
-            this.mostrarExito('Comunicado eliminado exitosamente');
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar comunicado:', error);
-          this.mostrarError('Error al eliminar el comunicado');
-        },
-      });
-      this.subscriptions.add(sub);
-    }
-  }
-
   private obtenerServicios(): void {
-    const sub = this.extraService.getServicios().subscribe({
+    if (!this.parkingId) return;
+
+    const sub = this.extraService.getServicios(this.parkingId).subscribe({
       next: (servicios) => (this.servicios = servicios),
       error: (error) => {
         console.error('Error al cargar servicios:', error);
@@ -243,7 +230,9 @@ export default class ExtraComponent implements OnInit, OnDestroy {
   }
 
   private obtenerComunicados(): void {
-    const sub = this.extraService.getComunicados().subscribe({
+    if (!this.parkingId) return;
+
+    const sub = this.extraService.getComunicados(this.parkingId).subscribe({
       next: (comunicados) => (this.comunicados = comunicados),
       error: (error) => {
         console.error('Error al cargar comunicados:', error);

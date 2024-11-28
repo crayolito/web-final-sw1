@@ -12,6 +12,7 @@ import {
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import mapboxgl, { Map, Marker } from 'mapbox-gl';
 import { Subscription } from 'rxjs';
+import { EmpresaInfo, HomeService } from '../../home/home.service';
 import { ModalService } from '../../shared/components/modal/modal.service';
 import { Perfil, PerfilService, Regla } from './perfil.service';
 
@@ -57,18 +58,18 @@ export default class PerfilComponent
 
   private fb = inject(FormBuilder);
   private perfilService = inject(PerfilService);
-  private modalService = inject(ModalService);
+  private homeService = inject(HomeService);
+  public modalService = inject(ModalService);
   private subscriptions: Subscription = new Subscription();
 
-  // Signals para la imagen
   public imageEmpresa = signal<string>('assets/subir-imagen.png');
   public estadoImagen = signal<boolean>(false);
-
-  // Estado del perfil y reglas
   public estadoForm = signal<boolean>(false);
+
   public perfilActual: Perfil | null = null;
   public reglas: Regla[] = [];
   public reglaEnEdicion: string | null = null;
+  private parkingId: string = ''; // Añadido para almacenar el ID del parking
 
   public perfilForm: FormGroup = this.fb.group({
     nombreParking: [''],
@@ -124,37 +125,53 @@ export default class PerfilComponent
   }
 
   private cargarDatosIniciales(): void {
-    const perfilesSub = this.perfilService.getPerfiles().subscribe({
-      next: (perfiles) => {
-        if (perfiles.length > 0) {
-          this.perfilActual = perfiles[0];
-          this.perfilForm.patchValue(this.perfilActual);
+    let info = this.homeService.empresaInfo();
 
-          // Actualizar el signal de imagen si existe una URL
-          if (this.perfilActual.imagenURL) {
-            this.imageEmpresa.set(this.perfilActual.imagenURL);
-            this.estadoImagen.set(true);
-          }
+    if (info) {
+      this.inicializarDatos(info);
+    } else {
+      const storedData = localStorage.getItem('empresaInfo');
+      if (storedData) {
+        try {
+          info = JSON.parse(storedData);
+          this.homeService.empresaInfo.set(info);
+          this.inicializarDatos(info!);
+        } catch (error) {
+          console.error('Error al parsear datos del localStorage:', error);
+          this.mostrarError(
+            'No se encontraron datos pre almacenados de la empresa'
+          );
         }
-      },
-      error: (error) => {
-        console.error('Error al cargar el perfil:', error);
-        this.mostrarError('Error al cargar los datos del perfil');
-      },
+      } else {
+        this.mostrarError('No se encontraron datos del perfil de la empresa');
+      }
+    }
+  }
+
+  private inicializarDatos(info: EmpresaInfo): void {
+    if (info.photoUrl != '' && info.photoUrl != null) {
+      this.imageEmpresa.set(info.photoUrl);
+      this.estadoImagen.set(true);
+    }
+
+    this.perfilForm.patchValue({
+      nombreParking: info.name,
+      cantEspacios: info.cantidadEspacios,
+      horarioAtencion: info.horarioAtencion,
+      correoElectronico: info.email,
+      telefono: info.telefono,
+      direccion: info.direccion,
+      coordenadas: info.coordenadas,
+      urlGoogleMaps: info.urlGoogleMaps,
     });
 
-    const reglasSub = this.perfilService.getReglas().subscribe({
-      next: (reglas) => {
-        this.reglas = reglas;
-      },
-      error: (error) => {
-        console.error('Error al cargar las reglas:', error);
-        this.mostrarError('Error al cargar las reglas');
-      },
-    });
+    // Guardar el ID del parking para usarlo en las operaciones con reglas
+    this.parkingId = info.idParking;
 
-    this.subscriptions.add(perfilesSub);
-    this.subscriptions.add(reglasSub);
+    // Cargar las reglas usando el servicio actualizado
+    if (this.parkingId) {
+      this.obtenerReglas();
+    }
   }
 
   private inicializarMapa(): void {
@@ -196,63 +213,35 @@ export default class PerfilComponent
     }
   }
 
-  guardarPerfil(): void {
-    if (this.perfilForm.valid) {
-      const perfilData = this.perfilForm.value;
-      const sub = (
-        this.perfilActual
-          ? this.perfilService.updatePerfil(this.perfilActual.id, perfilData)
-          : this.perfilService.createPerfil(perfilData)
-      ).subscribe({
-        next: (perfil) => {
-          if (perfil) {
-            this.perfilActual = perfil;
-            this.modalService.show({
-              title: 'Éxito',
-              subtitle: 'Perfil guardado exitosamente',
-              image: 'assets/modal-correcto.png',
-              duration: 3000,
-            });
-          }
-        },
-        error: (error) => {
-          console.error('Error al guardar el perfil:', error);
-          this.mostrarError('Error al guardar el perfil');
-        },
-      });
-      this.subscriptions.add(sub);
-    } else {
-      this.marcarCamposInvalidos(this.perfilForm);
-    }
-  }
+  guardarPerfil(): void {}
 
   guardarRegla(): void {
-    if (this.reglaForm.valid) {
+    if (this.reglaForm.valid && this.parkingId) {
       const categoriaSeleccionada = this.categorias.find(
         (cat) => cat.display === this.reglaForm.value.categoria
       );
 
       if (categoriaSeleccionada) {
-        const nuevaRegla = {
-          descripcion: this.reglaForm.value.descripcion,
-          categoria: categoriaSeleccionada.display,
-          color: categoriaSeleccionada.color,
-        };
+        const descripcion = this.reglaForm.value.descripcion;
+        const categoria = categoriaSeleccionada.value;
 
         const sub = (
           this.reglaEnEdicion
-            ? this.perfilService.updateRegla(this.reglaEnEdicion, nuevaRegla)
-            : this.perfilService.createRegla(nuevaRegla)
+            ? this.perfilService.updateRegla(this.reglaEnEdicion, {
+                descripcion,
+                categoria,
+              })
+            : this.perfilService.createRegla(
+                this.parkingId,
+                categoria,
+                descripcion
+              )
         ).subscribe({
           next: (regla) => {
-            if (regla) {
-              // En lugar de modificar el array directamente,
-              // recargamos todas las reglas
-              this.obtenerReglas();
-              this.reglaForm.reset();
-              this.reglaEnEdicion = null;
-              this.mostrarExito('Regla guardada exitosamente');
-            }
+            this.obtenerReglas();
+            this.reglaForm.reset();
+            this.reglaEnEdicion = null;
+            this.mostrarExito('Regla guardada exitosamente');
           },
           error: (error) => {
             console.error('Error al guardar la regla:', error);
@@ -270,37 +259,20 @@ export default class PerfilComponent
     const regla = this.reglas[index];
     if (regla) {
       this.reglaEnEdicion = regla.id;
+      const categoria = this.categorias.find(
+        (cat) => cat.value === regla.categoria
+      );
       this.reglaForm.patchValue({
         descripcion: regla.descripcion,
-        categoria: regla.categoria,
+        categoria: categoria?.display || '',
       });
     }
   }
 
-  eliminarRegla(index: number): void {
-    const regla = this.reglas[index];
-    if (regla) {
-      const sub = this.perfilService.deleteRegla(regla.id).subscribe({
-        next: (success) => {
-          if (success) {
-            // En lugar de modificar el array directamente,
-            // recargamos todas las reglas
-            this.obtenerReglas();
-            this.mostrarExito('Regla eliminada exitosamente');
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar la regla:', error);
-          this.mostrarError('Error al eliminar la regla');
-        },
-      });
-      this.subscriptions.add(sub);
-    }
-  }
-
-  // Añade este método privado para recargar las reglas
   private obtenerReglas(): void {
-    const sub = this.perfilService.getReglas().subscribe({
+    if (!this.parkingId) return;
+
+    const sub = this.perfilService.getReglas(this.parkingId).subscribe({
       next: (reglas) => {
         this.reglas = reglas;
       },
@@ -321,7 +293,6 @@ export default class PerfilComponent
           this.imageEmpresa.set(imageUrl);
           this.estadoImagen.set(true);
 
-          // Actualizar el perfil con la nueva URL de imagen
           if (this.perfilActual) {
             this.perfilService
               .updatePerfil(this.perfilActual.id, {
@@ -344,7 +315,6 @@ export default class PerfilComponent
                 },
               });
           } else {
-            // Si no hay perfil actual, solo actualiza el formulario
             this.perfilForm.patchValue({ imagenURL: imageUrl });
             this.mostrarExito('Imagen cargada exitosamente');
           }

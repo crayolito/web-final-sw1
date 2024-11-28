@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { delay, map, Observable, of } from 'rxjs';
+import { Comunicado, Servicio } from '../extra/extra.service';
 
 export interface Regla {
   id: string;
@@ -21,6 +22,31 @@ export interface Perfil {
   coordenadas: string;
   urlGoogleMaps: string;
   imagenURL: string;
+  reglas: Regla[];
+  comunicados: Comunicado[];
+  servicios: Servicio[];
+}
+
+interface ReglaCreateRequest {
+  title: string;
+  description: string;
+  idParking: {
+    id: string;
+  };
+}
+
+interface ReglaUpdateResponse {
+  id: string;
+  title: string;
+  description: string;
+}
+
+interface ParkingResponse {
+  rules: {
+    id: string;
+    title: string;
+    description: string;
+  }[];
 }
 
 @Injectable({
@@ -28,34 +54,12 @@ export interface Perfil {
 })
 export class PerfilService {
   public http = inject(HttpClient);
-  private apiUrl = 'api/perfil';
+  private apiUrl = 'https://parkingsw1-188f4effa11e.herokuapp.com/api';
 
   // Mock data for simulation
   private mockPerfiles: Perfil[] = [];
-  private mockReglas: Regla[] = [];
 
   constructor() {}
-
-  // Create new perfil
-  createPerfil(perfil: Omit<Perfil, 'id'>): Observable<Perfil> {
-    const newPerfil = {
-      ...perfil,
-      id: crypto.randomUUID(),
-    };
-    this.mockPerfiles.push(newPerfil);
-    return of(newPerfil).pipe(delay(500)); // Simulate network delay
-  }
-
-  // Get all perfiles
-  getPerfiles(): Observable<Perfil[]> {
-    return of(this.mockPerfiles).pipe(delay(500));
-  }
-
-  // Get perfil by ID
-  getPerfilById(id: string): Observable<Perfil | undefined> {
-    const perfil = this.mockPerfiles.find((p) => p.id === id);
-    return of(perfil).pipe(delay(500));
-  }
 
   // Update perfil
   updatePerfil(
@@ -70,58 +74,68 @@ export class PerfilService {
     return of(undefined);
   }
 
-  // Delete perfil
-  deletePerfil(id: string): Observable<boolean> {
-    const index = this.mockPerfiles.findIndex((p) => p.id === id);
-    if (index !== -1) {
-      this.mockPerfiles.splice(index, 1);
-      return of(true).pipe(delay(500));
-    }
-    return of(false);
-  }
-
-  // Create new regla
-  createRegla(regla: Omit<Regla, 'id'>): Observable<Regla> {
-    const newRegla = {
-      ...regla,
-      id: crypto.randomUUID(),
+  // Crear una Regla
+  createRegla(
+    title: string,
+    description: string,
+    parkingId: string
+  ): Observable<Regla> {
+    const request: ReglaCreateRequest = {
+      title,
+      description,
+      idParking: {
+        id: parkingId,
+      },
     };
-    this.mockReglas.push(newRegla);
-    return of(newRegla).pipe(delay(500));
+
+    return this.http
+      .post<ReglaCreateRequest>(`${this.apiUrl}/rules`, request)
+      .pipe(
+        map((response: any) => ({
+          id: response.id,
+          categoria: response.title,
+          descripcion: response.description,
+          color: this.getColorByTitle(response.title),
+        }))
+      );
   }
 
-  // Get all reglas
-  getReglas(): Observable<Regla[]> {
-    return of(this.mockReglas).pipe(delay(500));
+  // Traer todas las reglas
+  getReglas(parkingId: string): Observable<Regla[]> {
+    return this.http
+      .get<ParkingResponse>(`${this.apiUrl}/parkings/${parkingId}`)
+      .pipe(
+        map(
+          (response) =>
+            // Extraemos solo rules y mapeamos cada regla
+            response.rules?.map((regla) => ({
+              id: regla.id,
+              categoria: regla.title,
+              descripcion: regla.description,
+              color: this.getColorByTitle(regla.title),
+            })) || []
+        )
+      );
   }
 
-  // Get regla by ID
-  getReglaById(id: string): Observable<Regla | undefined> {
-    const regla = this.mockReglas.find((r) => r.id === id);
-    return of(regla).pipe(delay(500));
-  }
-
-  // Update regla
-  updateRegla(
-    id: string,
-    regla: Partial<Regla>
-  ): Observable<Regla | undefined> {
-    const index = this.mockReglas.findIndex((r) => r.id === id);
-    if (index !== -1) {
-      this.mockReglas[index] = { ...this.mockReglas[index], ...regla };
-      return of(this.mockReglas[index]).pipe(delay(500));
-    }
-    return of(undefined);
-  }
-
-  // Delete regla
-  deleteRegla(id: string): Observable<boolean> {
-    const index = this.mockReglas.findIndex((r) => r.id == id);
-    if (index !== -1) {
-      this.mockReglas.splice(index, 1);
-      return of(true).pipe(delay(500));
-    }
-    return of(false);
+  // Actualizar una regla
+  updateRegla(id: string, regla: Partial<Regla>): Observable<Regla> {
+    return this.http
+      .patch<ReglaUpdateResponse>(`${this.apiUrl}/rules/${id}`, regla)
+      .pipe(
+        map((response) => {
+          // Verificamos que tengamos los campos necesarios
+          if (response.id && response.title && response.description) {
+            return {
+              id: response.id,
+              categoria: response.title,
+              descripcion: response.description,
+              color: this.getColorByTitle(response.title),
+            } as Regla;
+          }
+          throw new Error('Respuesta incompleta del servidor');
+        })
+      );
   }
 
   uploadToCloudinary(file: any): Observable<any> {
@@ -133,5 +147,24 @@ export class PerfilService {
       `https://api.cloudinary.com/v1_1/da9xsfose/image/upload`,
       data
     );
+  }
+
+  private getColorByTitle(title: string): string {
+    switch (title.toLowerCase()) {
+      case 'normas':
+      case 'reglas de cumplimiento obligatorio':
+        return '#FF6B6B';
+
+      case 'cobertura':
+      case 'responsabilidades del estacionamiento':
+        return '#4ECDC4';
+
+      case 'exclusiones':
+      case 'limitaciones de responsabilidad':
+        return '#95A5A6';
+
+      default:
+        return '#95A5A6'; // Color por defecto
+    }
   }
 }

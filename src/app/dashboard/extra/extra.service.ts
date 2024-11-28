@@ -1,99 +1,139 @@
-import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { inject, Injectable } from '@angular/core';
+import { map, Observable, switchMap } from 'rxjs';
 
 export interface Servicio {
   id: string;
-  nombre: string;
-  categoria: string;
-  precio: number;
-  descuento: number;
+  nombre: string; // se mapea a description en la API
+  categoria: string; // se mapea a title en la API
+  precio: number; // se mapea a price
+  descuento: number; // se mapea a discount
 }
 
 export interface Comunicado {
   id: string;
-  contenido: string;
-  tipo: string;
+  contenido: string; // se mapea a description en la API
+  tipo: string; // se mapea a title en la API
+}
+
+interface ServicioCreateRequest {
+  title: string; // categoria
+  description: string; // nombre
+  price: number;
+  discount: number;
+  time: string;
+  idParking: string;
+}
+
+interface ComunicadoCreateRequest {
+  title: string; // tipo
+  description: string; // contenido
+  idParking: string;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ExtraService {
-  private mockServicios: Servicio[] = [];
-  private mockComunicados: Comunicado[] = [];
-
-  constructor() {}
+  private http = inject(HttpClient);
+  private apiUrl = 'https://parkingsw1-188f4effa11e.herokuapp.com/api';
 
   // Servicios CRUD
-  createServicio(servicio: Omit<Servicio, 'id'>): Observable<Servicio> {
-    const newServicio = {
-      ...servicio,
-      id: crypto.randomUUID(),
+  createServicio(
+    servicio: Omit<Servicio, 'id'>,
+    parkingId: string
+  ): Observable<Servicio[]> {
+    const request: ServicioCreateRequest = {
+      title: servicio.categoria,
+      description: servicio.nombre,
+      price: servicio.precio,
+      discount: servicio.descuento,
+      time: new Date().toISOString().split('T')[0],
+      idParking: parkingId,
     };
-    this.mockServicios.push(newServicio);
-    return of(newServicio).pipe(delay(500));
-  }
 
-  getServicios(): Observable<Servicio[]> {
-    return of(this.mockServicios).pipe(delay(500));
+    return this.http
+      .post<any>(`${this.apiUrl}/offers`, request)
+      .pipe(switchMap(() => this.getServicios(parkingId)));
   }
 
   updateServicio(
     id: string,
-    servicio: Partial<Servicio>
-  ): Observable<Servicio | undefined> {
-    const index = this.mockServicios.findIndex((s) => s.id === id);
-    if (index !== -1) {
-      this.mockServicios[index] = { ...this.mockServicios[index], ...servicio };
-      return of(this.mockServicios[index]).pipe(delay(500));
-    }
-    return of(undefined);
+    servicio: Partial<Servicio>,
+    parkingId: string
+  ): Observable<Servicio[]> {
+    const request = {
+      ...(servicio.categoria && { title: servicio.categoria }),
+      ...(servicio.nombre && { description: servicio.nombre }),
+      ...(servicio.precio && { price: servicio.precio }),
+      ...(servicio.descuento && { discount: servicio.descuento }),
+    };
+
+    return this.http
+      .patch<any>(`${this.apiUrl}/offers/${id}`, request)
+      .pipe(switchMap(() => this.getServicios(parkingId)));
   }
 
-  deleteServicio(id: string): Observable<boolean> {
-    const index = this.mockServicios.findIndex((s) => s.id === id);
-    if (index !== -1) {
-      this.mockServicios.splice(index, 1);
-      return of(true).pipe(delay(500));
-    }
-    return of(false);
+  getServicios(parkingId: string): Observable<Servicio[]> {
+    return this.http.get<any>(`${this.apiUrl}/parkings/${parkingId}`).pipe(
+      map((response) => {
+        if (response.offers) {
+          return response.offers.map((offer: any) => ({
+            id: offer.id,
+            nombre: offer.description,
+            categoria: offer.title,
+            precio: offer.price,
+            descuento: offer.discount,
+          }));
+        }
+        return [];
+      })
+    );
   }
 
   // Comunicados CRUD
-  createComunicado(comunicado: Omit<Comunicado, 'id'>): Observable<Comunicado> {
-    const newComunicado = {
-      ...comunicado,
-      id: crypto.randomUUID(),
+  createComunicado(
+    comunicado: Omit<Comunicado, 'id'>,
+    parkingId: string
+  ): Observable<Comunicado[]> {
+    const request: ComunicadoCreateRequest = {
+      title: comunicado.tipo,
+      description: comunicado.contenido,
+      idParking: parkingId,
     };
-    this.mockComunicados.push(newComunicado);
-    return of(newComunicado).pipe(delay(500));
-  }
 
-  getComunicados(): Observable<Comunicado[]> {
-    return of(this.mockComunicados).pipe(delay(500));
+    return this.http
+      .post<any>(`${this.apiUrl}/announcements`, request)
+      .pipe(switchMap(() => this.getComunicados(parkingId)));
   }
 
   updateComunicado(
     id: string,
-    comunicado: Partial<Comunicado>
-  ): Observable<Comunicado | undefined> {
-    const index = this.mockComunicados.findIndex((c) => c.id === id);
-    if (index !== -1) {
-      this.mockComunicados[index] = {
-        ...this.mockComunicados[index],
-        ...comunicado,
-      };
-      return of(this.mockComunicados[index]).pipe(delay(500));
-    }
-    return of(undefined);
+    comunicado: Partial<Comunicado>,
+    parkingId: string
+  ): Observable<Comunicado[]> {
+    const request = {
+      ...(comunicado.tipo && { title: comunicado.tipo }),
+      ...(comunicado.contenido && { description: comunicado.contenido }),
+    };
+
+    return this.http
+      .patch<any>(`${this.apiUrl}/announcements/${id}`, request)
+      .pipe(switchMap(() => this.getComunicados(parkingId)));
   }
 
-  deleteComunicado(id: string): Observable<boolean> {
-    const index = this.mockComunicados.findIndex((c) => c.id === id);
-    if (index !== -1) {
-      this.mockComunicados.splice(index, 1);
-      return of(true).pipe(delay(500));
-    }
-    return of(false);
+  getComunicados(parkingId: string): Observable<Comunicado[]> {
+    return this.http.get<any>(`${this.apiUrl}/parkings/${parkingId}`).pipe(
+      map((response) => {
+        if (response.announcements) {
+          return response.announcements.map((announcement: any) => ({
+            id: announcement.id,
+            contenido: announcement.description,
+            tipo: announcement.title,
+          }));
+        }
+        return [];
+      })
+    );
   }
 }
