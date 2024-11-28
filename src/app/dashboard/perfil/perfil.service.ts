@@ -1,7 +1,38 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { delay, map, Observable, of } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { Comunicado, Servicio } from '../extra/extra.service';
+
+export interface BackendResponse {
+  id: string;
+  name: string;
+  photoUrl: string | null;
+  numberOfSpaces: number | null;
+  openingHours: string | null;
+  email: string;
+  cellphone: string;
+  direction: string | null;
+  coordinates: string | null;
+  urlGoogleMaps: string | null;
+  offers: Array<{
+    id: string;
+    title: string;
+    description: string;
+    price: number;
+    discount: number;
+    time: string;
+  }>;
+  announcements: Array<{
+    id: string;
+    title: string;
+    description: string;
+  }>;
+  rules: Array<{
+    id: string;
+    title: string;
+    description: string;
+  }>;
+}
 
 export interface Regla {
   id: string;
@@ -62,16 +93,8 @@ export class PerfilService {
   constructor() {}
 
   // Update perfil
-  updatePerfil(
-    id: string,
-    perfil: Partial<Perfil>
-  ): Observable<Perfil | undefined> {
-    const index = this.mockPerfiles.findIndex((p) => p.id === id);
-    if (index !== -1) {
-      this.mockPerfiles[index] = { ...this.mockPerfiles[index], ...perfil };
-      return of(this.mockPerfiles[index]).pipe(delay(500));
-    }
-    return of(undefined);
+  updatePerfil(id: string, perfil: Partial<Perfil>): Observable<Perfil> {
+    return this.http.patch<Perfil>(`${this.apiUrl}/parkings/${id}`, perfil);
   }
 
   // Crear una Regla

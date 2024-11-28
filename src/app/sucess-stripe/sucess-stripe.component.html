@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .floating {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .pulsing {
+        text-shadow: 0 0 10px rgba(75, 154, 183, 0.2);
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      .card-shadow {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .card-shadow:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-b from-custom-primary to-white min-h-screen flex items-center justify-center p-4"
+  >
+    <div
+      class="card-shadow max-w-2xl w-full bg-white rounded-2xl p-8 text-center relative"
+    >
+      <div class="floating mb-8">
+        <div
+          class="inline-flex items-center justify-center w-24 h-24 bg-green-100 rounded-full"
+        >
+          <svg
+            class="w-16 h-16 text-green-500"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <h1
+        class="text-4xl font-maven-pro font-bold text-custom-secondary mb-8 pulsing"
+      >
+        ¡GRACIAS POR REALIZAR SU PAGO!
+      </h1>
+
+      <button
+        class="mt-8 px-12 py-4 bg-custom-quaternary text-white font-maven-pro font-semibold rounded-lg hover:bg-opacity-90 transform hover:-translate-y-1 transition-all duration-300 shadow-md"
+      >
+        VOLVER ATRÁS
+      </button>
+    </div>
+
+    <script>
+      gsap.from(".card-shadow", {
+        duration: 1,
+        y: 50,
+        opacity: 0,
+        ease: "power3.out",
+      });
+    </script>
+  </body>
+</html>

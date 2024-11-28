@@ -213,7 +213,74 @@ export default class PerfilComponent
     }
   }
 
-  guardarPerfil(): void {}
+  guardarPerfil(): void {
+    if (this.perfilForm.valid && this.parkingId) {
+      const updateData = {
+        name: this.perfilForm.value.nombreParking,
+        photoUrl: this.perfilForm.value.imagenURL,
+        numberOfSpaces: this.perfilForm.value.cantEspacios,
+        openingHours: this.perfilForm.value.horarioAtencion,
+        email: this.perfilForm.value.correoElectronico,
+        cellphone: this.perfilForm.value.telefono,
+        direction: this.perfilForm.value.direccion,
+        coordinates: this.perfilForm.value.coordenadas,
+        urlGoogleMaps: this.perfilForm.value.urlGoogleMaps,
+      };
+
+      const sub = this.perfilService
+        .updatePerfil(this.parkingId, updateData)
+        .subscribe({
+          next: (response: any) => {
+            const updatedInfo: EmpresaInfo = {
+              ...this.homeService.empresaInfo()!,
+              name: response.name,
+              photoUrl: response.photoUrl || '',
+              cantidadEspacios: response.numberOfSpaces || 0,
+              horarioAtencion: response.openingHours || '',
+              email: response.email,
+              telefono: response.cellphone || '',
+              direccion: response.direction || '',
+              coordenadas: response.coordinates || '',
+              urlGoogleMaps: response.urlGoogleMaps || '',
+              ofertas: response.offers.map((offer: any) => ({
+                id: offer.id,
+                categoria: offer.title,
+                nombre: offer.description,
+                precio: offer.price,
+                descuento: offer.discount,
+              })),
+              comunicados: response.announcements.map((announcement: any) => ({
+                id: announcement.id,
+                tipo: announcement.title,
+                contenido: announcement.description,
+              })),
+              reglas: response.rules.map((rule: any) => ({
+                id: rule.id,
+                categoria: rule.title,
+                descripcion: rule.description,
+                color: this.getColorByTitle(rule.title),
+              })),
+            };
+
+            // Actualizar el signal
+            this.homeService.empresaInfo.set(updatedInfo);
+
+            // Actualizar el localStorage
+            localStorage.setItem('empresaInfo', JSON.stringify(updatedInfo));
+
+            this.mostrarExito('Perfil actualizado exitosamente');
+          },
+          error: (error) => {
+            console.error('Error al actualizar el perfil:', error);
+            this.mostrarError('Error al actualizar el perfil');
+          },
+        });
+
+      this.subscriptions.add(sub);
+    } else {
+      this.marcarCamposInvalidos(this.perfilForm);
+    }
+  }
 
   guardarRegla(): void {
     if (this.reglaForm.valid && this.parkingId) {
@@ -282,6 +349,22 @@ export default class PerfilComponent
       },
     });
     this.subscriptions.add(sub);
+  }
+
+  private getColorByTitle(title: string): string {
+    switch (title.toLowerCase()) {
+      case 'normas':
+      case 'reglas de cumplimiento obligatorio':
+        return '#FF6B6B';
+      case 'cobertura':
+      case 'responsabilidades del estacionamiento':
+        return '#4ECDC4';
+      case 'exclusiones':
+      case 'limitaciones de responsabilidad':
+        return '#95A5A6';
+      default:
+        return '#95A5A6';
+    }
   }
 
   seleccionarImagen(event: any) {

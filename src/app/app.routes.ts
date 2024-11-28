@@ -6,6 +6,16 @@ export const routes: Routes = [
     loadComponent: () => import('./home/home.component').then((m) => m.default),
   },
   {
+    path: 'success-stripe',
+    loadComponent: () =>
+      import('./sucess-stripe/sucess-stripe.component').then((m) => m.default),
+  },
+  {
+    path: 'cancel-stripe',
+    loadComponent: () =>
+      import('./cancel-stripe/cancel-stripe.component').then((m) => m.default),
+  },
+  {
     path: 'dashboard',
     loadComponent: () =>
       import('./dashboard/dashboard.component').then((m) => m.default),

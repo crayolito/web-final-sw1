@@ -46,7 +46,9 @@
       </button>
     </section>
   </section>
+
   <section class="h-[81%] w-full flex flex-col gap-[2%]">
+    <!-- Cabecera de la tabla -->
     <div
       class="h-[15%] w-full bg-custom-secondary rounded-t-md border-b-2 border-custom-tertiary/50 flex flex-row items-center gap-[1%] shadow-custom-option-dashboar"
     >
@@ -65,7 +67,6 @@
       >
         Salida
       </div>
-
       <div
         class="w-[15%] font-bold font-maven-pro text-custom-primary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
       >
@@ -87,139 +88,65 @@
         Extra
       </div>
     </div>
-    <!-- READ : ELEMENTO -->
+
+    <!-- Contenido de la tabla -->
     <div class="h-[85%] w-full overflow-y-auto custom-scrollbar">
+      <!-- Mensaje cuando no hay tickets -->
       <div
-        class="h-[15%] w-full flex flex-row items-start justify-start gap-[1%] mb-[1%]"
+        *ngIf="tickets.length === 0"
+        class="w-full h-full flex items-center justify-center"
       >
-        <div
-          class="w-[5%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          120
-        </div>
-        <div
-          class="w-[20%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          13/10/2024 - 18:11
-        </div>
-        <div
-          class="w-[20%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          13/10/2024 - 23:11
-        </div>
-
-        <div
-          class="w-[15%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          Tarjeta de Credito
-        </div>
-        <div
-          class="w-[15%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          <div
-            class="bg-custom-quinary/65 rounded-3xl py-[3%] px-[5%] font-bold"
-          >
-            Pagado
-          </div>
-        </div>
-        <div
-          class="w-[10%] font-maven-pro text-custom h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          46 BS
-        </div>
-        <div
-          class="w-[10%] font-maven-pro text-custom h-[100%] flex items-center border-custom-tertiary/50 justify-center"
-        >
-          10 BS
-        </div>
-      </div>
-      <div
-        class="h-[15%] w-full flex flex-row items-start justify-start gap-[1%] mb-[1%]"
-      >
-        <div
-          class="w-[5%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          120
-        </div>
-        <div
-          class="w-[20%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          13/10/2024 - 18:11
-        </div>
-        <div
-          class="w-[20%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          13/10/2024 - 23:11
-        </div>
-
-        <div
-          class="w-[15%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          Tarjeta de Credito
-        </div>
-        <div
-          class="w-[15%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          <div
-            class="bg-custom-quaternary/65 rounded-3xl py-[3%] px-[5%] font-bold"
-          >
-            Pendiente
-          </div>
-        </div>
-        <div
-          class="w-[10%] font-maven-pro text-custom h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
-        >
-          46 BS
-        </div>
-        <div
-          class="w-[10%] font-maven-pro text-custom h-[100%] flex items-center border-custom-tertiary/50 justify-center"
-        >
-          10 BS
-        </div>
+        <p class="text-custom-secondary font-maven-pro text-xl">
+          No hay tickets generados
+        </p>
       </div>
 
+      <!-- Lista de tickets -->
       <div
-        class="h-[15%] w-full flex flex-row items-start justify-start gap-[1%] mb-[1%]"
+        *ngFor="let ticket of tickets; let i = index"
+        class="h-[15%] w-full flex flex-row items-start justify-start gap-[1%] mb-[1%] hover:bg-custom-secondary/5"
       >
         <div
           class="w-[5%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
         >
-          120
+          {{ i + 1 }}
         </div>
         <div
           class="w-[20%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
         >
-          13/10/2024 - 18:11
+          {{ ticket.entrance }}
         </div>
         <div
           class="w-[20%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
         >
-          13/10/2024 - 23:11
+          {{ ticket.exit }}
         </div>
-
         <div
           class="w-[15%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
         >
-          Tarjeta de Credito
+          {{ ticket.paymentMethod }}
         </div>
         <div
           class="w-[15%] font-maven-pro text-custom-secondary h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
         >
           <div
-            class="bg-custom-tertiary/65 rounded-3xl py-[3%] px-[5%] font-bold"
+            [class]="
+              getStateClass(ticket.state) +
+              ' rounded-3xl py-[3%] px-[5%] font-bold'
+            "
           >
-            Cancelado
+            {{ ticket.state }}
           </div>
         </div>
         <div
           class="w-[10%] font-maven-pro text-custom h-[100%] flex items-center border-r-2 border-custom-tertiary/50 justify-center"
         >
-          46 BS
+          {{ ticket.charge }} BS
         </div>
         <div
           class="w-[10%] font-maven-pro text-custom h-[100%] flex items-center border-custom-tertiary/50 justify-center"
         >
-          10 BS
+          0 BS
         </div>
       </div>
     </div>

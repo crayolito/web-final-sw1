@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+      @keyframes float {
+        0% {
+          transform: translateY(0px);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+        100% {
+          transform: translateY(0px);
+        }
+      }
+
+      @keyframes gradient {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .floating {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      .gradient-bg {
+        background: linear-gradient(-45deg, #fcfbfb, #4b9ab7, #313539, #7b7e80);
+        background-size: 400% 400%;
+        animation: gradient 15s ease infinite;
+      }
+
+      .card-shadow {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .card-shadow:hover {
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        transform: translateY(-5px);
+      }
+
+      .blur-circle {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(40px);
+        opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body class="gradient-bg min-h-screen flex items-center justify-center p-4">
+    <div
+      class="card-shadow max-w-2xl w-full bg-white rounded-2xl p-12 relative overflow-hidden"
+    >
+      <!-- Círculos decorativos con blur -->
+      <div
+        class="blur-circle bg-custom-quaternary/30 w-64 h-64 -top-32 -right-32"
+      ></div>
+      <div
+        class="blur-circle bg-custom-quinary/20 w-48 h-48 -bottom-24 -left-24"
+      ></div>
+
+      <div class="floating mb-8">
+        <div
+          class="inline-flex items-center justify-center w-28 h-28 bg-custom-quaternary/20 rounded-full"
+        >
+          <svg
+            class="w-16 h-16 text-custom-quaternary"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"
+            ></path>
+          </svg>
+        </div>
+      </div>
+
+      <div class="text-center space-y-6 relative z-10">
+        <h1
+          class="text-3xl font-maven-pro font-bold text-custom-secondary mb-4"
+        >
+          ESPERO HABERLO ATENDIDO CORRECTAMENTE
+        </h1>
+        <p class="text-xl font-maven-pro text-custom-tertiary">
+          ESTAMOS A SU SERVICIO
+        </p>
+
+        <div class="flex justify-center space-x-3 mt-8">
+          <div class="w-3 h-3 rounded-full bg-custom-quaternary"></div>
+          <div class="w-3 h-3 rounded-full bg-custom-tertiary"></div>
+          <div class="w-3 h-3 rounded-full bg-custom-quaternary"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      gsap.from(".card-shadow", {
+        duration: 1,
+        y: 50,
+        opacity: 0,
+        ease: "power3.out",
+      });
+    </script>
+  </body>
+</html>
