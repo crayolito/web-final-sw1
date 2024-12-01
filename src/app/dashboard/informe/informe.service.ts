@@ -18,7 +18,7 @@ export interface Ticket {
 })
 export class InformeService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://parkingsw1-188f4effa11e.herokuapp.com/api';
+  private apiUrl = 'http://localhost:3000/api';
 
   getTickets(parkingId: string): Observable<Ticket[]> {
     return this.http

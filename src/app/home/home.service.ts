@@ -26,7 +26,7 @@ export interface EmpresaInfo {
 })
 export class HomeService {
   public http = inject(HttpClient);
-  private apiUrl = 'https://parkingsw1-188f4effa11e.herokuapp.com/api';
+  private apiUrl = 'http://localhost:3000/api';
   public empresaInfo = signal<EmpresaInfo | null>(null);
 
   registrarEmpresaParking(

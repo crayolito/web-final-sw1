@@ -36,7 +36,7 @@ interface ComunicadoCreateRequest {
 })
 export class ExtraService {
   private http = inject(HttpClient);
-  private apiUrl = 'https://parkingsw1-188f4effa11e.herokuapp.com/api';
+  private apiUrl = 'http://localhost:3000/api';
 
   // Servicios CRUD
   createServicio(
